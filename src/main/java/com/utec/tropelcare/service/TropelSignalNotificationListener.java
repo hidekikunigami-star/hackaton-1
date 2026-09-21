@@ -1,3 +1,0 @@
-package com.utec.tropelcare.service;
-import com.utec.tropelcare.event.TropelSignalCreatedEvent; import org.springframework.scheduling.annotation.Async; import org.springframework.stereotype.Component; import org.springframework.transaction.annotation.Transactional; import org.springframework.transaction.event.TransactionPhase; import org.springframework.transaction.event.TransactionalEventListener;
-@Component public class TropelSignalNotificationListener{private final NotificationService service;public TropelSignalNotificationListener(NotificationService s){service=s;}@Async("tropelTaskExecutor")@Transactional@TransactionalEventListener(phase=TransactionPhase.AFTER_COMMIT) public void onCreated(TropelSignalCreatedEvent event){service.process(event.signalId());}}
