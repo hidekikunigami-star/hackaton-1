@@ -1,0 +1,3 @@
+package tuckersoft.bandersnatch.controller;
+import tuckersoft.bandersnatch.dto.DTOs; import tuckersoft.bandersnatch.service.AuthService; import jakarta.validation.Valid; import org.springframework.http.*; import org.springframework.web.bind.annotation.*;
+@RestController @RequestMapping("/api/v1/auth") public class AuthController{private final AuthService s;public AuthController(AuthService s){this.s=s;}@PostMapping("/register")ResponseEntity<DTOs.AuthResponse> register(@Valid @RequestBody DTOs.RegisterRequest r){return ResponseEntity.status(201).body(s.register(r));}@PostMapping("/login")DTOs.AuthResponse login(@Valid @RequestBody DTOs.LoginRequest r){return s.login(r);}}

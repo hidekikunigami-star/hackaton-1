@@ -1,0 +1,12 @@
+package tuckersoft.bandersnatch;
+import org.junit.jupiter.api.*; import org.mockito.*; import tuckersoft.bandersnatch.model.*; import tuckersoft.bandersnatch.repo.*; import tuckersoft.bandersnatch.service.*; import tuckersoft.bandersnatch.dto.DTOs; import org.springframework.context.ApplicationEventPublisher; import static org.mockito.Mockito.*; import static org.junit.jupiter.api.Assertions.*;
+class DecisionServiceTest {
+ @Mock DecisionRepository decisions; @Mock PlaythroughRepository plays; @Mock StoryNodeRepository nodes; @Mock UserService users; @Mock ApplicationEventPublisher publisher; @Mock RealityLogRepository logs; @InjectMocks DecisionService service;
+ User user; StoryNode node; Playthrough play;
+ @BeforeEach void set(){MockitoAnnotations.openMocks(this);user=new User();user.setId(1L);user.setEmail("u@test");user.setDisplayName("U");user.setRole("ROLE_USER");node=new StoryNode();node.setNodeCode("NODE");node.setPrimaryBranchCode("NODE");node.setGlitchBranchCode("NODE");play=new Playthrough();play.setId(1L);play.setUser(user);play.setPlayerTag("P");play.setCurrentNode(node);play.setLucidity(100);play.setControlLevel(0);play.setStatus("ACTIVA");when(users.current()).thenReturn(user);when(plays.findById(1L)).thenReturn(java.util.Optional.of(play));when(decisions.save(any())).thenAnswer(i->{Decision d=i.getArgument(0);try{var f=Decision.class.getDeclaredField("id");f.setAccessible(true);f.set(d,99L);}catch(Exception ignored){}return d;});}
+ @Test void precedencia(){assertEquals("RUPTURA_CUARTA_PARED",service.classify("Stefan destruye la camara"));}
+ @Test void corrupta(){var r=service.decide(new DTOs.DecisionRequest(1L,"%%% 0101 ###","CRITICO"),false);assertEquals("ENTRADA_CORRUPTA",r.branchType());assertEquals(100,r.lucidity());assertEquals(0,r.controlLevel());verify(publisher,never()).publishEvent(any());}
+ @Test void critico(){var r=service.decide(new DTOs.DecisionRequest(1L,"Stefan acepta el guion previsto","CRITICO"),false);assertEquals(60,r.lucidity());assertEquals(45,r.controlLevel());}
+ @Test void controlFinal(){play.setControlLevel(60);play.setLucidity(40);var r=service.decide(new DTOs.DecisionRequest(1L,"Stefan acepta el guion previsto","CRITICO"),false);assertEquals("ENDING_PAC_SYMBOL",r.endingCode());}
+ @Test void publicaEvento(){service.decide(new DTOs.DecisionRequest(1L,"Stefan acepta el guion previsto","LEVE"),false);verify(publisher,times(1)).publishEvent(any());}
+}

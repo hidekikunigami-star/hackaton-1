@@ -1,0 +1,3 @@
+package tuckersoft.bandersnatch.controller;
+import tuckersoft.bandersnatch.dto.DTOs; import tuckersoft.bandersnatch.service.UserService; import jakarta.validation.Valid; import org.springframework.web.bind.annotation.*; import java.util.*;
+@RestController @RequestMapping("/api/v1/users") public class UserController{private final UserService s;public UserController(UserService s){this.s=s;}@GetMapping("/me")DTOs.UserResponse me(){return s.me();}@GetMapping List<DTOs.UserResponse> all(){return s.all();}@PatchMapping("/{id}/role")DTOs.UserResponse role(@PathVariable long id,@Valid @RequestBody DTOs.RoleRequest r){return s.role(id,r.role());}}

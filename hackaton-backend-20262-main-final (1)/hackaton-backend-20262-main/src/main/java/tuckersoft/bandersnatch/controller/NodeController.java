@@ -1,0 +1,3 @@
+package tuckersoft.bandersnatch.controller;
+import tuckersoft.bandersnatch.dto.DTOs; import tuckersoft.bandersnatch.service.NodeService; import jakarta.validation.Valid; import org.springframework.http.*; import org.springframework.web.bind.annotation.*; import java.util.*;
+@RestController @RequestMapping("/api/v1/nodes") public class NodeController{private final NodeService s;public NodeController(NodeService s){this.s=s;}@PostMapping ResponseEntity<DTOs.NodeResponse> create(@Valid @RequestBody DTOs.NodeRequest r){return ResponseEntity.status(201).body(s.create(r));}@GetMapping List<DTOs.NodeResponse> all(){return s.all();}@GetMapping("/{id}")DTOs.NodeResponse get(@PathVariable long id){return s.get(id);}}
