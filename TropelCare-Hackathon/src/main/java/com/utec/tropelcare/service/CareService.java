@@ -1,3 +1,0 @@
-package com.utec.tropelcare.service;
-import com.utec.tropelcare.dto.CareResponseDto; import com.utec.tropelcare.exception.NotFoundException; import com.utec.tropelcare.repository.CareResponseRepository; import org.springframework.stereotype.Service;
-@Service public class CareService{private final CareResponseRepository repo;public CareService(CareResponseRepository r){repo=r;}@org.springframework.transaction.annotation.Transactional(readOnly=true) public CareResponseDto getBySignal(Long id){var c=repo.findBySignalId(id).orElseThrow(()->new NotFoundException("No existe una respuesta de cuidado para la señal #"+id));return new CareResponseDto(c.getId(),c.getSignal().getId(),c.getResponseCode(),c.getDescription(),c.getCreatedAt());}}

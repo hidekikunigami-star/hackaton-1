@@ -1,2 +1,0 @@
-package com.utec.tropelcare.controller; import com.utec.tropelcare.dto.GuardianDto; import com.utec.tropelcare.service.GuardianService; import org.springframework.web.bind.annotation.*; import java.util.List;
-@RestController @RequestMapping("/api/v1/guardians") public class GuardianController{private final GuardianService s;public GuardianController(GuardianService s){this.s=s;}@GetMapping public List<GuardianDto> all(){return s.all();}@GetMapping("/{id}") public GuardianDto get(@PathVariable Long id){return s.get(id);}}

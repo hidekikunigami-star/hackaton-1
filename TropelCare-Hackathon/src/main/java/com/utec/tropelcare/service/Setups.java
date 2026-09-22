@@ -1,1 +1,0 @@
-package com.utec.tropelcare.service; import java.util.Set; public final class Setups{public static final Set<String> CLIMATES=Set.of("PIXEL_FOREST","NEON_CAVE","CLOUD_AQUARIUM","RETRO_ARCADE"); public static final Set<String> SPECIES=Set.of("BLOBITO","CHISPA","GRUÑON","DORMILON","GLITCHY"); private Setups(){}}
